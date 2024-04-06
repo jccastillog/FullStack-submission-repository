@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import AddPhones from './components/AddPhones'
 import Phone from './components/Phones'
 import SearchPhone from './components/SearchPhones'
-import Notification from './components/Notification'
 import phoneService from './services/phones'
 
 
@@ -12,8 +11,6 @@ const App = (props) => {
   const [newNumber, setNewNumber] = useState('') 
   const [search, setSearch] = useState('')
   const [deleted,setDeleted] = useState('')
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
-  const [typeMsg, setTypeMsg] = useState('success')
 
 
   useEffect(() => {
@@ -42,36 +39,25 @@ const App = (props) => {
       const phoneObject = { name: newPhone, number: newNumber }
       phoneService
         .create(phoneObject)
-        .then(returnedPhone => {
-          setPhones(phones.concat(returnedPhone))
+        .then(returnedNote => {
+          setPhones(phones.concat(returnedNote))
           setNewPhone('')
           setNewNumber('')
           setSearch('')
-          setErrorMessage(`Added ${returnedPhone.name} `)
-          setTypeMsg('success')
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-        })
+      })
     }else {
       console.log('Phone number already exists.')
       if (window.confirm(`${newPhone} is already added to phonebook,replace de old number with a new one`)){
         const idupdate = phones.find(n => n.name === newPhone).id
         const phoneObject = { name: newPhone, number: newNumber }
+        console.log(idupdate)
         phoneService
         .update(idupdate,phoneObject)
-        .then(returnedPhone => {
-          setPhones(phones.map(phone => phone.id !== idupdate ? phone : returnedPhone))
+        .then(returnedNote => {
+          setPhones(phones.map(phone => phone.id !== idupdate ? phone : returnedNote))
           setNewPhone('')
           setNewNumber('')
           setSearch('')
-        })
-        .catch(error => {
-          setErrorMessage(`Information of ${newPhone} has already been removed from server`)
-          setTypeMsg('error')
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
         })
       }
     }  
@@ -89,27 +75,26 @@ const App = (props) => {
     setNewNumber(event.target.value)
   }
 
+  const handleDelete = (event) => {
+    setDeleted(event.target.value)
+
+  }
+
   const makeDelete = (event) => {
     const iddel=(event.target.value)
     const namedel = phones.find(n => n.id === iddel).name
     if (window.confirm(`Delete ${namedel}`)) {
       phoneService
       .delereg(iddel)
-      .then(returnedPhone => {
+      .then(returnedNote => {
         setPhones(phones.map(phone => phone.id !== iddel ? phone : ''))
-        setErrorMessage(`Deleted ${returnedPhone.name} `)
-        setTypeMsg('error')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
       })
   }
 }
 
   return (
     <div>
-      <h1>Phonebook</h1>
-      <Notification message={errorMessage} typeMsg={typeMsg} />
+      <h2>Phonebook</h2>
       <SearchPhone
           search={search}
           handleSearchChange={handleSearchChange}
