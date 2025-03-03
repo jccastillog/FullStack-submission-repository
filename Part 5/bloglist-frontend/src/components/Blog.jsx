@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike, handleDelete }) => {
 
   const [viewDetails, setViewDetails] = useState(false)
 
   const toggleDetails = () => {
-    setViewDetails(!viewDetails); 
-  };
+    setViewDetails(!viewDetails)
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -21,18 +21,22 @@ const Blog = ({ blog }) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title} {blog.author} {" "}
-        <button onClick={toggleDetails}>{viewDetails ? "Hide" : "View"}</button>
-      </div> 
-      {viewDetails && ( 
+        <strong>Title:</strong>
+        {blog.title}
+        <strong>-  Author:</strong>
+        {blog.author} {' '}
+        <button onClick={toggleDetails}>{viewDetails ? 'Hide' : 'View'}</button>
+      </div>
+      {viewDetails && (
         <div>
           <p>URL: {blog.url}</p>
-          <p>Likes: {blog.likes} <button>Like</button></p> 
-          <p>Author: {blog.author}</p>
+          <p>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>Like</button></p>
+          <p>Author: {blog.user ? blog.user.name : 'Unknown'}</p>
+          <button onClick={() => handleDelete(blog.id)}>Delete</button>
         </div>
-      )} 
+      )}
     </div>
-  );
-};
+  )
+}
 
 export default Blog
