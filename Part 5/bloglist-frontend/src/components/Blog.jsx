@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 
-const Blog = ({ blog, handleLike, handleDelete }) => {
+const Blog = ({ blog, handleLike, handleDelete, currentUser }) => {
 
   const [viewDetails, setViewDetails] = useState(false)
 
@@ -18,21 +18,23 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
     backgroundColor: '#f0f0f0'
   }
 
+  const isOwner = currentUser?.username === blog.user?.username
+
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="blog">
+      <div className="blog-summary">
         <strong>Title:</strong>
-        {blog.title}
+        <p data-testid="blog-title">{blog.title}</p>
         <strong>-  Author:</strong>
-        {blog.author} {' '}
+        <p data-testid="blog-author"> {blog.author}</p> {' '}
         <button onClick={toggleDetails}>{viewDetails ? 'Hide' : 'View'}</button>
       </div>
       {viewDetails && (
-        <div>
+        <div className="blog-details">
           <p>URL: {blog.url}</p>
-          <p>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>Like</button></p>
+          <p data-testid="blog-likes">Likes: {blog.likes} <button onClick={() => handleLike(blog)}>Like</button></p>
           <p>Author: {blog.user ? blog.user.name : 'Unknown'}</p>
-          <button onClick={() => handleDelete(blog.id)}>Delete</button>
+          {isOwner && <button onClick={() => handleDelete(blog.id)}>Delete</button>}
         </div>
       )}
     </div>

@@ -151,7 +151,7 @@ const App = () => {
           </p>
 
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} />
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} currentUser={user} />
           ))}
           <br />
 
@@ -160,6 +160,8 @@ const App = () => {
           </Togglable>
         </div>
       )}
+
+      <h2>'Blog app, Department of Computer Science, University of Helsinki 2024'</h2>
     </div>
   )
 }
